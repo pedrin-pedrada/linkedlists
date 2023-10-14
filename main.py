@@ -181,10 +181,12 @@ if __name__ == "__main__":
     # header.inicio_receptor = inicio_receptor
     # header.inicio_lista_mensagem = inicio_lista_mensagem
 
+    incluir_emissor('Ana')
     incluir_emissor('Pedro')
+    incluir_emissor('Bárbara')
     incluir_emissor('Joao')
-    incluir_emissor('Gabriel')
     incluir_emissor('Josias')
+    incluir_emissor('Helena')
     consultar_emissores()
     remover_emissor(0)
     consultar_emissores()
