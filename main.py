@@ -53,17 +53,71 @@ def mostrar_estrutura_inverso(inicio):
         aux = aux.ant
 
 
-def incluir_emissor():
-    pass
+def incluir_emissor(nome_emissor):
+    aux = header.inicio_emissor
+    maior_id = 0
+    while aux is not None:
+        if aux.info.id_emissor >= maior_id:
+            maior_id = aux.info.id_emissor + 1
+        aux = aux.prox
+
+    novo_emissor = Emissor()
+    novo_emissor.id_emissor = maior_id
+    novo_emissor.nome_emissor = nome_emissor
+    nova_estrutura = Estrutura()
+    nova_estrutura.info = novo_emissor
+
+    if header.inicio_emissor is None:
+        header.inicio_emissor = nova_estrutura
+    else:
+        aux = header.inicio_emissor
+        while aux.prox is not None:
+            aux = aux.prox
+
+        aux.prox = nova_estrutura
+        nova_estrutura.ant = aux
 
 
-def remover_emissor():
-    pass
+def remover_emissor(id_deletar):
+    aux = header.inicio_emissor
+
+    if header.inicio_emissor is None:
+        print('Nenhum emissor cadastrado')
+        return
+
+    success = False
+    if header.inicio_emissor.info.id_emissor == id_deletar:
+        header.inicio_emissor = header.inicio_emissor.prox
+        success = True
+
+    else:
+        while aux is not None:
+            if aux.info.id_emissor == id_deletar:
+                aux.ant.prox = aux.prox
+
+                if aux.prox is not None:
+                    aux.prox.ant = aux.ant
+
+                success = True
+                break
+            aux = aux.prox
+
+    if success:
+        print('Emissor deletado:')
+        print(f'\t{aux.info.id_emissor} - {aux.info.nome_emissor}')
+        del aux
+    else:
+        print(f'Nenhum emissor foi encontrado com o id "{id_deletar}"')
 
 
 def consultar_emissores():
     # escrever na tela os emissores cadastrados
-    pass
+    aux = header.inicio_emissor
+    print('Emissores:')
+    print(f'\tid_emissor - nome_emissor')
+    while aux is not None:
+        print(f'\t{aux.info.id_emissor} - {aux.info.nome_emissor}')
+        aux = aux.prox
 
 
 def incluir_receptor():
@@ -102,52 +156,64 @@ def outras_operacoes():
     pass
 
 
+header = Header()
+
 if __name__ == "__main__":
+    # emissor = Emissor()
+    # inicio_emissor = Estrutura()
+    # inicio_emissor.info = emissor
+    #
+    # receptor = Receptor()
+    # inicio_receptor = Estrutura()
+    # inicio_receptor.info = receptor
+    #
+    # mensagem = Mensagem()
+    # inicio_mensagem = Estrutura()
+    # inicio_mensagem.info = mensagem
+    #
+    # lista_mensagem = ListaMensagem()
+    # inicio_lista_mensagem = Estrutura()
+    # inicio_lista_mensagem.info = lista_mensagem
+    #
+    # lista_mensagem.inicio_mensagem = inicio_mensagem
+    #
+    # header.inicio_emissor = inicio_emissor
+    # header.inicio_receptor = inicio_receptor
+    # header.inicio_lista_mensagem = inicio_lista_mensagem
 
-    emissor = Emissor()
-    inicio_emissor = Estrutura()
-    inicio_emissor.info = emissor
+    incluir_emissor('Pedro')
+    incluir_emissor('Joao')
+    incluir_emissor('Gabriel')
+    incluir_emissor('Josias')
+    consultar_emissores()
+    remover_emissor(0)
+    consultar_emissores()
 
-    receptor = Receptor()
-    inicio_receptor = Estrutura()
-    inicio_receptor.info = receptor
-
-    mensagem = Mensagem()
-    inicio_mensagem = Estrutura()
-    inicio_mensagem.info = mensagem
-
-    lista_mensagem = ListaMensagem()
-    inicio_lista_mensagem = Estrutura()
-    inicio_lista_mensagem.info = lista_mensagem
-
-    lista_mensagem.inicio_mensagem = inicio_mensagem
-
-    header = Header()
-    header.inicio_emissor = inicio_emissor
-    header.inicio_receptor = inicio_receptor
-    header.inicio_lista_mensagem = inicio_lista_mensagem
-
-    novo = Estrutura()
-    novo2 = Estrutura()
-    novo3 = Estrutura()
-    novo4 = Estrutura()
-
-    novo.info = 1
-    novo2.info = 2
-    novo3.info = 3
-    novo4.info = 4
-
-    novo.prox = novo2
-    novo2.prox = novo3
-    novo3.prox = novo4
-
-    novo2.ant = novo
-    novo3.ant = novo2
-    novo4.ant = novo3
-
-    mostrar_estrutura(novo)
+    # mostrar_estrutura(header.inicio_emissor)
     print()
-    mostrar_estrutura_inverso(novo)
+    # mostrar_estrutura_inverso(header.inicio_emissor)
+
+    # novo = Estrutura()
+    # novo2 = Estrutura()
+    # novo3 = Estrutura()
+    # novo4 = Estrutura()
+    #
+    # novo.info = 1
+    # novo2.info = 2
+    # novo3.info = 3
+    # novo4.info = 4
+    #
+    # novo.prox = novo2
+    # novo2.prox = novo3
+    # novo3.prox = novo4
+    #
+    # novo2.ant = novo
+    # novo3.ant = novo2
+    # novo4.ant = novo3
+    #
+    # mostrar_estrutura(novo)
+    # print()
+    # mostrar_estrutura_inverso(novo)
 
     # print('novo:', novo.info)
     # print('novo.prox.info:', novo.prox.info)
