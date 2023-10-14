@@ -1,7 +1,5 @@
 # LinkedLists
 
-![image](https://user-images.githubusercontent.com/64370426/235376551-454466c9-5bf3-41f2-8308-71b003abc564.png)
-
 ## Sobre o Projeto
 
 Projeto de Sistema de Mensageria simplificado usando listas encadeadas, desenvolvido para a disciplina de Algoritmos e Estruturas de Dados - curso de Análise e Desenvolvimento de Sistemas.
