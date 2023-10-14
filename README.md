@@ -1,9 +1,5 @@
 # LinkedLists
 
-## Sobre o Projeto
-
-Projeto de Sistema de Mensageria simplificado usando listas encadeadas, desenvolvido para a disciplina de Algoritmos e Estruturas de Dados - curso de Análise e Desenvolvimento de Sistemas.
-
 ## Descrição do problema:
 "Middleware Orientado a Mensagens (MOM), ou Message Brokers, ou Mensageria, são
 ferramentas que oferecem suporte para comunicação assíncrona entre sistemas. Há
@@ -15,30 +11,7 @@ armazenadas até que o receptor as processe (desenfileire, de forma automática 
 solicitação)."
 
 O trabalho é a implementação de um sistema de mensageria simplificado, que vai
-permitir a um emissor enviar mensagens para um ou mais receptores. Para isso, ele vai
-manter:
-
-• uma lista de emissores de mensagens
-• uma lista de receptores de mensagens
-• filas de mensagens, uma fila para cada receptor
-• Para poder enviar mensagem, um emissor tem que estar na lista de emissores. Para
-enviar a mensagem, o emissor tem que informar quais são os receptores, que devem
-estar na lista de receptores.
-• Cada mensagem enviada é copiada (enfileirada) na fila de mensagens de cada um dos
-receptores que o emissor definiu.
-• Cada receptor deve retirar suas mensagens da fila (desenfileirar).
-
-## Representação:
-• Usa listas encadeadas (simples ou duplas).
-• Cada nodo da lista de emissores deve conter: número de identificação (inteiro), nome
-(string).
-• Cada nodo da lista de receptores deve conter: número de identificação (inteiro), nome
-(string).
-• Cada fila de mensagens deve conter: identificação do receptor (inteiro), e a fila de
-mensagens.
-• Cada nodo da fila de mensagens deve conter: a identificação do emissor
-(inteiro), e a mensagem (texto).
-• É possível acrescentar outras informações nos nodos/listas se necessário.
+permitir a um emissor enviar mensagens para um ou mais receptores.
 
 
 ## Funcionalidades desenvolvidas
@@ -64,3 +37,7 @@ um emissor, exibe total de mensagens recebidas por um receptor.
 
 Python (é premissa para o trabalho que as referências entre os nodos sejam manipuladas explicitamente pelo programa  - não utiliza classe,
 método ou função pronta da linguagem para listas encadeadas).
+
+## Sobre o Projeto
+
+Projeto de Sistema de Mensageria simplificado usando listas encadeadas | Algoritmos e Estruturas de Dados | Análise e Desenvolvimento de Sistemas.
