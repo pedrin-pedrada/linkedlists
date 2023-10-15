@@ -1,6 +1,3 @@
-import copy
-
-
 class Estrutura:  # classse base para montar a estrura dos dados
     def __init__(self):
         self.info = None  # referência das classes abaixo (como * em C)
@@ -54,7 +51,7 @@ def mostrar_estrutura_inverso(inicio):
 
 def incluir_emissor(nome_emissor):
     aux = header.inicio_emissor
-    maior_id = 0
+    maior_id = 1
     while aux is not None:
         if aux.info.id_emissor >= maior_id:
             maior_id = aux.info.id_emissor + 1
@@ -71,7 +68,7 @@ def incluir_emissor(nome_emissor):
     header.inicio_emissor = nova_estrutura
 
 
-def remover_emissor(id_deletar):
+def remover_emissor(id_emissor):
     if header.inicio_emissor is None:
         print('Nenhum emissor cadastrado')
         return
@@ -79,14 +76,14 @@ def remover_emissor(id_deletar):
     aux = header.inicio_emissor
     success = False
 
-    if header.inicio_emissor.info.id_emissor == id_deletar:
+    if header.inicio_emissor.info.id_emissor == id_emissor:
         header.inicio_emissor = header.inicio_emissor.prox
         success = True
 
     else:
         anterior = None
         while aux is not None:
-            if aux.info.id_emissor == id_deletar:
+            if aux.info.id_emissor == id_emissor:
                 anterior.prox = aux.prox
                 success = True
                 break
@@ -98,7 +95,7 @@ def remover_emissor(id_deletar):
         print('Emissor deletado:')
         print(f'\t{aux.info.id_emissor} - {aux.info.nome_emissor}')
     else:
-        print(f'Nenhum emissor foi encontrado com o id "{id_deletar}"')
+        print(f'Nenhum emissor foi encontrado com o id "{id_emissor}"')
 
 
 def consultar_emissores():
@@ -111,9 +108,19 @@ def consultar_emissores():
         aux = aux.prox
 
 
+def valida_emissor(id_emissor):
+    # retorna True ou False se existir um emissor com o id informado
+    aux = header.inicio_emissor
+    while aux is not None:
+        if aux.info.id_emissor == id_emissor:
+            return True
+        aux = aux.prox
+    return False
+
+
 def incluir_receptor(nome_receptor):
     aux = header.inicio_receptor
-    maior_id = 0
+    maior_id = 1
     while aux is not None:
         if aux.info.id_receptor >= maior_id:
             maior_id = aux.info.id_receptor + 1
@@ -130,7 +137,7 @@ def incluir_receptor(nome_receptor):
     header.inicio_receptor = nova_estrutura
 
 
-def remover_receptor(id_deletar):
+def remover_receptor(id_receptor):
     # quando o receptor é removido, sua fila de mensagens também é removida
     if header.inicio_receptor is None:
         print('Nenhum receptor cadastrado')
@@ -139,14 +146,14 @@ def remover_receptor(id_deletar):
     aux = header.inicio_receptor
     success = False
 
-    if header.inicio_receptor.info.id_receptor == id_deletar:
+    if header.inicio_receptor.info.id_receptor == id_receptor:
         header.inicio_receptor = header.inicio_receptor.prox
         success = True
 
     else:
         anterior = None
         while aux is not None:
-            if aux.info.id_receptor == id_deletar:
+            if aux.info.id_receptor == id_receptor:
                 anterior.prox = aux.prox
                 success = True
                 break
@@ -157,9 +164,10 @@ def remover_receptor(id_deletar):
     if success:
         print('Receptor deletado:')
         print(f'\t{aux.info.id_receptor} - {aux.info.nome_receptor}')
+        remover_lista_comunicacao(id_receptor)
 
     else:
-        print(f'Nenhum receptor foi encontrado com o id "{id_deletar}"')
+        print(f'Nenhum receptor foi encontrado com o id "{id_receptor}"')
 
     print("\tAinda não finalizado")
 
@@ -174,10 +182,26 @@ def consultar_receptores():
         aux = aux.prox
 
 
+def valida_receptor(id_receptor):
+    # retorna True ou False se existir um receptor com o id informado
+    aux = header.inicio_receptor
+    while aux is not None:
+        if aux.info.id_receptor == id_receptor:
+            return True
+        aux = aux.prox
+    return False
+
+
 def enviar_mensagem(id_emissor, id_receptor, mensagem):
     # um emissor cadastrado escreve a mensagem,
     # define quais são os receptores (pelo menos um receptor). a
     # mensagem é enfileirada na fila de cada receptor.
+    existe_emissor = valida_emissor(id_emissor)
+    existe_receptor = valida_receptor(id_receptor)
+
+    if not existe_emissor or not existe_receptor:
+        print("A mensagem não foi adicionada pois os emissores ou receptores informados não existem")
+        return
 
     nova_mensagem = Mensagem()
     nova_mensagem.id_emissor = id_emissor
@@ -213,15 +237,31 @@ def enviar_mensagem(id_emissor, id_receptor, mensagem):
     print("Mensagem adicionada")
 
 
-def retira_mensagem():
+def retira_mensagem(id_receptor):
     # um receptor cadastrado desenfileira uma mensagem
     # (apresentar mensagem de erro se a fila está vazia)
-    pass
+    print(f'Mensagem para o receptor "{id_receptor}":')
+
+    existe_mensagem = False
+    aux = header.inicio_lista_comunicacao
+    while aux is not None:
+        if aux.info.id_receptor == id_receptor:  # existe lista do receptor
+            print(f'\tid_emissor - mensagem')
+
+            if aux.info.inicio_mensagem is not None:
+                print(f'\t{aux.info.inicio_mensagem.info.id_emissor} - {aux.info.inicio_mensagem.info.mensagem}')
+                aux.info.inicio_mensagem = aux.info.inicio_mensagem.prox
+                existe_mensagem = True
+
+        aux = aux.prox
+
+    if not existe_mensagem:
+        print('Nenhuma mensagem cadastrada')
 
 
-def consultar_fila_mensagens(id_receptor):
+def consultar_fila_comunicacao(id_receptor):
     # exibe a fila de mensagens de um receptor
-    print(f'Mensagens para o receptor "{id_receptor}":')
+    print(f'Mensagens na fila do receptor "{id_receptor}":')
 
     existe_mensagem = False
     aux = header.inicio_lista_comunicacao
@@ -238,7 +278,37 @@ def consultar_fila_mensagens(id_receptor):
         aux = aux.prox
 
     if not existe_mensagem:
-        print('Nenhuma mensagem cadastrada')
+        print('Nenhuma mensagem na fila do receptor')
+
+
+def remover_lista_comunicacao(id_receptor):
+    # quando o receptor é removido, sua fila de mensagens também é removida
+    if header.inicio_lista_comunicacao is None:
+        return
+
+    aux = header.inicio_lista_comunicacao
+    success = False
+
+    if header.inicio_lista_comunicacao.info.id_receptor == id_receptor:
+        header.inicio_lista_comunicacao = header.inicio_lista_comunicacao.prox
+        success = True
+
+    else:
+        anterior = None
+        while aux is not None:
+            if aux.info.id_receptor == id_receptor:
+                anterior.prox = aux.prox
+                success = True
+                break
+
+            anterior = aux
+            aux = aux.prox
+
+    if success:
+        print(f'Lista de comunicacao do receptor "{id_receptor}" deletada')
+    else:
+        print(f'Nenhuma lista de comunicacao foi encontrado com o receptor "{id_receptor}"')
+
 
 def outras_operacoes():
     # como exibir receptores com fila vazia,
@@ -261,7 +331,7 @@ if __name__ == "__main__":
     incluir_emissor('Josias')
     incluir_emissor('Helena')
     consultar_emissores()
-    remover_emissor(1)
+    # remover_emissor(1)
     consultar_emissores()
 
     print()
@@ -274,26 +344,34 @@ if __name__ == "__main__":
     incluir_receptor('Smirnoff')
     incluir_receptor('Absolut')
     consultar_receptores()
-    remover_receptor(1)
+    # remover_receptor(1)
     consultar_receptores()
 
     print()
     print()
 
-    enviar_mensagem(0, 0, 'Bom dia')
-    enviar_mensagem(4, 0, 'Boa tarde')
+    enviar_mensagem(1, 1, 'Bom dia')
+    enviar_mensagem(4, 1, 'Boa tarde')
     enviar_mensagem(2, 0, 'Boa Noite')
     enviar_mensagem(2, 1, 'Boa Noite')
     enviar_mensagem(2, 2, 'Boa Noite')
 
     print()
     print()
-    consultar_fila_mensagens(0)
+    consultar_fila_comunicacao(0)
     print()
-    consultar_fila_mensagens(1)
+    consultar_fila_comunicacao(1)
     print()
-    consultar_fila_mensagens(2)
-
+    consultar_fila_comunicacao(2)
+    print()
+    print()
+    retira_mensagem(1)
+    print()
+    consultar_fila_comunicacao(1)
+    print()
+    remover_lista_comunicacao(2)
+    print()
+    consultar_fila_comunicacao(2)
 
     # emissor = Emissor()
     # inicio_emissor = Estrutura()
