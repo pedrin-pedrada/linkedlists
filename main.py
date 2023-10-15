@@ -101,11 +101,19 @@ def remover_emissor(id_emissor):
 def consultar_emissores():
     # escrever na tela os emissores cadastrados
     aux = header.inicio_emissor
+    qtd = 0
     print('Emissores:')
+    if header.inicio_emissor is None:
+        print("\tNenhum emissor cadastrado")
+        return qtd
+
     print(f'\tid_emissor - nome_emissor')
     while aux is not None:
         print(f'\t{aux.info.id_emissor} - {aux.info.nome_emissor}')
         aux = aux.prox
+        qtd += 1
+
+    return qtd
 
 
 def valida_emissor(id_emissor):
@@ -176,10 +184,19 @@ def consultar_receptores():
     # escrever na tela os receptores cadastrados
     aux = header.inicio_receptor
     print('Receptores:')
+    qtd = 0
+
+    if header.inicio_receptor is None:
+        print('\tNenhum receptor cadastrado')
+        return qtd
+
     print(f'\tid_receptor - nome_receptor')
     while aux is not None:
         print(f'\t{aux.info.id_receptor} - {aux.info.nome_receptor}')
         aux = aux.prox
+        qtd += 1
+
+    return qtd
 
 
 def valida_receptor(id_receptor):
@@ -319,59 +336,257 @@ def outras_operacoes():
     pass
 
 
+def inicia_interface():
+    print('Bem Vindo!')
+    print("Trabalho 1 - Algorítimos e Estrutura de Dados")
+    print("Grupo: Bárbara Schneider e Pedro Schneider")
+    while True:
+        print('\033[1m', end='')
+        print('\033[96m'+'================= Menu =================')
+        print('\033[92m'+'\t1'+'\033[0m'+' - Emissores')
+        print('\033[93m'+'\t2'+'\033[0m'+' - Receptores')
+        print('\033[94m'+'\t3'+'\033[0m'+' - Mensagens')
+        print('\033[91m'+'\t0'+'\033[0m'+' - Sair')
+        print()
+        print('\033[96m'+'========================================')
+        print('\033[0m', end='')
+        print('\tSelecione uma opção:')
+        resposta = input('\t')
+        print()
+
+        match resposta:  # EMISSORES
+            case '1':
+                print("Acessando menu de emissores...")
+                while True:
+                    print('\033[1m', end='')
+                    print('\033[96m' + '================= Menu =================')
+                    print('\033[92m'+'\tEmissores'+'\033[0m')
+                    print('\t\t1 - Cadastrar emissor')
+                    print('\t\t2 - Remover emissor')
+                    print('\t\t3 - Consultar emissores')
+                    print('\033[91m'+'\t\t0'+'\033[0m'+' - Voltar')
+                    print()
+                    print('\033[96m' + '========================================')
+                    print('\033[0m', end='')
+                    print('\tSelecione uma opção:')
+                    resposta = input('\t')
+                    print()
+
+                    match resposta:
+                        case '1':
+                            print('\033[1m', end='')
+                            print('Cadastrar Emissor')
+                            print('\tInsira o nome do emissor:')
+                            print('\033[0m', end='')
+                            resposta = input('\t')
+                            print()
+                            incluir_emissor(resposta)
+
+                        case '2':
+                            print('\033[1m', end='')
+                            print('Remover Emissor')
+                            qtd = consultar_emissores()
+                            print()
+                            if qtd:
+                                print('\tInsira o id do emissor que deseja remover:')
+                            else:
+                                continue
+
+                            print('\033[0m', end='')
+                            resposta = input('\t')
+                            print()
+
+                            try:
+                                resposta = int(resposta)
+                            except ValueError:
+                                print("Id inválido, não foi possível remover")
+                                continue
+
+                            remover_emissor(resposta)
+
+                        case '3':
+                            print('\033[1m', end='')
+                            print('Consultar Emissores')
+                            consultar_emissores()
+                            print()
+                            print('\033[0m', end='')
+
+                        case '0':
+                            print('Voltando para o menu...')
+                            break
+
+                        case _:
+                            print(f'"{resposta}" não é uma opção válida')
+
+            case '2':  # RECEPTORES
+                print("Acessando menu de receptores...")
+                while True:
+                    print('\033[1m', end='')
+                    print('\033[96m' + '================= Menu =================')
+                    print('\033[93m'+'\tReceptor'+'\033[0m')
+                    print('\t\t1 - Cadastrar receptor')
+                    print('\t\t2 - Remover receptor')
+                    print('\t\t3 - Consultar receptor')
+                    print('\033[91m'+'\t\t0'+'\033[0m'+' - Voltar')
+                    print()
+                    print('\033[96m' + '========================================')
+                    print('\033[0m', end='')
+                    print('\tSelecione uma opção:')
+                    resposta = input('\t')
+                    print()
+
+                    match resposta:
+                        case '1':
+                            print('\033[1m', end='')
+                            print('Cadastrar Receptor')
+                            print('\tInsira o nome do receptor:')
+                            print('\033[0m', end='')
+                            resposta = input('\t')
+                            print()
+                            incluir_receptor(resposta)
+
+                        case '2':
+                            print('\033[1m', end='')
+                            print('Remover Receptor')
+                            qtd = consultar_receptores()
+                            print()
+                            if qtd:
+                                print('\tInsira o id do receptor que deseja remover:')
+                            else:
+                                continue
+
+                            print('\033[0m', end='')
+                            resposta = input('\t')
+                            print()
+
+                            try:
+                                resposta = int(resposta)
+                            except ValueError:
+                                print("Id inválido, não foi possível remover")
+                                continue
+
+                            remover_receptor(resposta)
+
+                        case '3':
+                            print('\033[1m', end='')
+                            print('Consultar Receptores')
+                            consultar_receptores()
+                            print()
+                            print('\033[0m', end='')
+
+                        case '0':
+                            print('Voltando para o menu...')
+                            break
+
+                        case _:
+                            print(f'"{resposta}" não é uma opção válida')
+
+            case '3':  # MENSAGENS
+                print("Acessando menu de mensagens...")
+                while True:
+                    print('\033[1m', end='')
+                    print('\033[96m' + '================= Menu =================')
+                    print('\033[94m'+'\tMensagens'+'\033[0m')
+                    print('\t\t1 - Enviar mensagem')
+                    print('\t\t2 - Ler mensagem de um receptor')
+                    print('\t\t3 - Consultar mensagens de um receptor')
+                    print('\t\t4 - Remover todas mensagens de um receptor')
+                    print('\033[91m'+'\t\t0'+'\033[0m'+' - Voltar')
+                    print()
+                    print('\033[96m' + '========================================')
+                    print('\033[0m', end='')
+                    print('\tSelecione uma opção:')
+                    resposta = input('\t')
+                    print()
+
+                    match resposta:
+                        case '1':
+                            pass
+
+                        case '2':
+
+                            pass
+
+                        case '3':
+
+                            pass
+
+                        case '4':
+
+                            pass
+
+                        case '0':
+                            print('Voltando para o menu...')
+                            break
+
+                        case _:
+                            print(f'"{resposta}" não é uma opção válida')
+
+            case '0':
+                print('Saindo...')
+                print('Obrigado!')
+                exit()
+
+            case _:
+                print(f'"{resposta}" não é uma opção válida')
+
+
 header = Header()
 
 if __name__ == "__main__":
-
-    incluir_emissor('Ana')
-
-    incluir_emissor('Pedro')
-    incluir_emissor('Bárbara')
-    incluir_emissor('Joao')
-    incluir_emissor('Josias')
-    incluir_emissor('Helena')
-    consultar_emissores()
-    # remover_emissor(1)
-    consultar_emissores()
-
-    print()
-    print()
-
-    incluir_receptor('Joao')
-    incluir_receptor('Carlos')
-    incluir_receptor('Roberto')
-    incluir_receptor('Natasha')
-    incluir_receptor('Smirnoff')
-    incluir_receptor('Absolut')
-    consultar_receptores()
-    # remover_receptor(1)
-    consultar_receptores()
-
-    print()
-    print()
-
-    enviar_mensagem(1, 1, 'Bom dia')
-    enviar_mensagem(4, 1, 'Boa tarde')
-    enviar_mensagem(2, 0, 'Boa Noite')
-    enviar_mensagem(2, 1, 'Boa Noite')
-    enviar_mensagem(2, 2, 'Boa Noite')
-
-    print()
-    print()
-    consultar_fila_comunicacao(0)
-    print()
-    consultar_fila_comunicacao(1)
-    print()
-    consultar_fila_comunicacao(2)
-    print()
-    print()
-    retira_mensagem(1)
-    print()
-    consultar_fila_comunicacao(1)
-    print()
-    remover_lista_comunicacao(2)
-    print()
-    consultar_fila_comunicacao(2)
+    inicia_interface()
+    #
+    #
+    #
+    # incluir_emissor('Ana')
+    #
+    # incluir_emissor('Pedro')
+    # incluir_emissor('Bárbara')
+    # incluir_emissor('Joao')
+    # incluir_emissor('Josias')
+    # incluir_emissor('Helena')
+    # consultar_emissores()
+    # # remover_emissor(1)
+    # consultar_emissores()
+    #
+    # print()
+    # print()
+    #
+    # incluir_receptor('Joao')
+    # incluir_receptor('Carlos')
+    # incluir_receptor('Roberto')
+    # incluir_receptor('Natasha')
+    # incluir_receptor('Smirnoff')
+    # incluir_receptor('Absolut')
+    # consultar_receptores()
+    # # remover_receptor(1)
+    # consultar_receptores()
+    #
+    # print()
+    # print()
+    #
+    # enviar_mensagem(1, 1, 'Bom dia')
+    # enviar_mensagem(4, 1, 'Boa tarde')
+    # enviar_mensagem(2, 0, 'Boa Noite')
+    # enviar_mensagem(2, 1, 'Boa Noite')
+    # enviar_mensagem(2, 2, 'Boa Noite')
+    #
+    # print()
+    # print()
+    # consultar_fila_comunicacao(0)
+    # print()
+    # consultar_fila_comunicacao(1)
+    # print()
+    # consultar_fila_comunicacao(2)
+    # print()
+    # print()
+    # retira_mensagem(1)
+    # print()
+    # consultar_fila_comunicacao(1)
+    # print()
+    # remover_lista_comunicacao(2)
+    # print()
+    # consultar_fila_comunicacao(2)
 
     # emissor = Emissor()
     # inicio_emissor = Estrutura()
