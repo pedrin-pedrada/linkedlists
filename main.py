@@ -261,20 +261,25 @@ def retira_mensagem(id_receptor):
     # (apresentar mensagem de erro se a fila está vazia)
     print(f'Mensagem para o receptor "{id_receptor}":')
 
-    existe_mensagem = False
-    aux = header.inicio_lista_comunicacao
-    while aux is not None:
-        if aux.info.id_receptor == id_receptor:  # existe lista do receptor
-            print(f'\tid_emissor - mensagem')
+    qtd = consulta_qtd_mensagens(id_receptor)
+    if qtd:
+        aux = header.inicio_lista_comunicacao
+        while aux is not None:
+            if aux.info.id_receptor == id_receptor:  # existe lista do receptor
+                print(f'\tid_emissor - mensagem')
 
-            if aux.info.inicio_mensagem is not None:
-                print(f'\t{aux.info.inicio_mensagem.info.id_emissor} - {aux.info.inicio_mensagem.info.mensagem}')
-                aux.info.inicio_mensagem = aux.info.inicio_mensagem.prox
-                existe_mensagem = True
+                if aux.info.inicio_mensagem is not None:
+                    print(f'\t{aux.info.inicio_mensagem.info.id_emissor} - {aux.info.inicio_mensagem.info.mensagem}')
+                    aux.info.inicio_mensagem = aux.info.inicio_mensagem.prox
 
-        aux = aux.prox
+            aux = aux.prox
 
-    if not existe_mensagem:
+        if qtd-1 > 0:
+            print(f'Ainda existem "{qtd-1}" mensagens na fila')
+        else:
+            print("Todas mensagens foram retiradas")
+
+    else:
         print('Nenhuma mensagem cadastrada')
 
 
@@ -282,6 +287,8 @@ def consultar_lista_comunicacao(id_receptor):
     # exibe a fila de mensagens de um receptor
     print('\033[94m', end="")
     print(f'Mensagens na fila do receptor "{id_receptor}":')
+
+    print(f'"{consulta_qtd_mensagens(id_receptor)}" mensagens na fila')
 
     existe_mensagem = False
     aux = header.inicio_lista_comunicacao
@@ -339,6 +346,23 @@ def outras_operacoes():
     # enviadas por um emissor,
     # exibir total de mensagens recebidas por um recepto
     pass
+
+
+def consulta_qtd_mensagens(id_receptor):
+    # exibe a fila de mensagens de um receptor
+    qtd = 0
+    aux = header.inicio_lista_comunicacao
+    while aux is not None:
+        if aux.info.id_receptor == id_receptor:  # existe lista do receptor -> enfileirar
+            aux_mensagem = aux.info.inicio_mensagem
+
+            while aux_mensagem is not None:
+                aux_mensagem = aux_mensagem.prox
+                qtd += 1
+
+        aux = aux.prox
+
+    return qtd
 
 
 def inicia_interface():
